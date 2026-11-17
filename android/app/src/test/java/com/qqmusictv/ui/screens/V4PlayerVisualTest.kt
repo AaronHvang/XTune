@@ -102,11 +102,11 @@ class V4PlayerVisualTest {
     @Test fun gateHasOnlyIconBrandAndShortInstruction() {
         compose.setContent {Box(Modifier.requiredSize(360.dp,800.dp)) {LargeScreenGate {Text("Main")}}}
         compose.onNodeWithText("Main").assertDoesNotExist()
-        val icon=compose.onNodeWithContentDescription("QQ音乐 TV").fetchSemanticsNode().boundsInRoot
-        val brand=compose.onNodeWithText("QQ音乐").fetchSemanticsNode().boundsInRoot
+        val icon=compose.onNodeWithContentDescription("XTune").fetchSemanticsNode().boundsInRoot
+        val brand=compose.onNodeWithText("XTune").fetchSemanticsNode().boundsInRoot
         val instruction=compose.onNodeWithText("请在大屏设备上使用").fetchSemanticsNode().boundsInRoot
         assertTrue(icon.bottom<brand.top);assertTrue(brand.bottom<instruction.top)
-        compose.onNodeWithText("QQ音乐 专为大屏体验设计。",substring=true).assertDoesNotExist()
+        compose.onNodeWithText("XTune 专为大屏体验设计。",substring=true).assertDoesNotExist()
         image("gate-simplified")
     }
 }

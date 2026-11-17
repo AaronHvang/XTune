@@ -1,13 +1,21 @@
 package com.qqmusictv.ui.viewmodel
 
+import android.app.Application
+import android.media.AudioManager
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.reflect.Proxy
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 /** Exercise the production controller entry points without networking or real account data. */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk=[28],application=Application::class)
 class PlaybackControllerTest {
     private class Engine(var state:Int=Player.STATE_READY,var wantsPlay:Boolean=true) {
         var prepared=0
@@ -28,6 +36,10 @@ class PlaybackControllerTest {
         val c=Class.forName("sun.misc.Unsafe");val u=c.getDeclaredField("theUnsafe").apply {isAccessible=true}.get(null)
         val vm=c.getMethod("allocateInstance",Class::class.java).invoke(u,PlayerViewModel::class.java) as PlayerViewModel
         fun field(name:String,value:Any)=PlayerViewModel::class.java.getDeclaredField(name).apply {isAccessible=true}.set(vm,value)
+        val ctx=RuntimeEnvironment.getApplication()
+        field("context",ctx)
+        field("audioManager\$delegate",lazyOf(ctx.getSystemService(AudioManager::class.java)))
+        field("audioFocusListener",AudioManager.OnAudioFocusChangeListener { })
         field("player",main.exo);field("_state",MutableStateFlow(PlayerState()));field("sourcePreparation",SourcePreparation())
         if(partner!=null) field("crossfadeExo",partner.exo)
         return vm
