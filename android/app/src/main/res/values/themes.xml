@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.QQMusicTv.Base" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/startup_window</item>
+        <item name="android:statusBarColor">@color/startup_red</item>
+        <item name="android:navigationBarColor">@color/startup_red</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+    <style name="Theme.QQMusicTv.Runtime" parent="Theme.QQMusicTv.Base">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+    <style name="Theme.QQMusicTv" parent="Theme.QQMusicTv.Runtime" />
+    <style name="Theme.QQMusicTv.Launch" parent="Theme.QQMusicTv.Runtime" />
+</resources>

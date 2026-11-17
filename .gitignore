@@ -1,0 +1,45 @@
+# ─── Secrets / runtime state (NEVER commit) ───────────────────────────
+server/auth-state.json
+**/auth-state.json
+*.mut
+.env
+.env.local
+secrets.json
+keystore.properties
+*.jks
+*.keystore
+
+# ─── Android / Gradle ─────────────────────────────────────────────────
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/local.properties
+*.apk
+*.ap_
+*.aab
+*.dex
+.cxx/
+
+# ─── 大文件素材 ────────────────────────────────────────────────────────
+*.mp4
+*.mov
+
+# ─── Node / Bun ───────────────────────────────────────────────────────
+node_modules/
+bun.lockb
+npm-debug.log*
+yarn-error.log
+
+# ─── IDE / OS ─────────────────────────────────────────────────────────
+.idea/
+*.iml
+.DS_Store
+*.log
+
+# ─── Caches / temp ────────────────────────────────────────────────────
+am_stream_cache/
+__pycache__/
+*.pyc
+/tmp/
+scratchpad/
