@@ -13,6 +13,13 @@ val localProps = Properties().apply {
     if (f.exists()) load(f.inputStream())
 }
 
+// Release signing material lives in a gitignored keystore.properties. Without it (CI,
+// contributors) the release build falls back to the debug key so it still assembles.
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) load(f.inputStream())
+}
+
 // One release definition also supplies packaging, website metadata and delivery checks.
 val releaseVersion = Properties().apply {
     rootProject.file("release-version.properties").inputStream().use { load(it) }
@@ -47,14 +54,24 @@ android {
         buildConfigField("String", "GIT_SHA", "\"$gitSha\"")
     }
 
+    signingConfigs {
+        if (keystoreProps.getProperty("storeFile") != null) {
+            create("release") {
+                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-            // Continue the installed candidate's certificate so adb install -r preserves data.
-            // The build type and debuggable flag remain Release regardless of the key's name.
-            signingConfig = signingConfigs.getByName("debug")
+            // Signed with the project's release key when keystore.properties is present.
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

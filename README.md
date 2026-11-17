@@ -47,6 +47,19 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 需要 JDK 17、Android SDK（compileSdk 35）。首次构建前请在 `android/local.properties` 中设置 `sdk.dir`。
 
+### 签名
+
+`assembleRelease` 默认使用 debug 证书，方便无密钥环境直接出包。正式分发时在 `android/keystore.properties`（已 gitignore）中提供自己的密钥：
+
+```properties
+storeFile=/absolute/path/to/release.jks
+storePassword=…
+keyAlias=…
+keyPassword=…
+```
+
+四个字段齐全时 release 构建自动改用该密钥签名。
+
 ### 依赖许可证（合规性）
 
 所有第三方依赖均为 **Apache-2.0 / BSD / MIT** 类宽松许可，与 GPL-3.0 兼容：
